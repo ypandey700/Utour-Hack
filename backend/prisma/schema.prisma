@@ -1,9 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -13,11 +7,382 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum UserRole {
+  TOURIST
+  POLICE
+}
+
+enum TouristStatus {
+  ACTIVE
+  INACTIVE
+  EMERGENCY
+  MISSING
+  SAFE
+  DEPARTED
+}
+
+enum IncidentType {
+  MISSING_PERSON
+  ACCIDENT
+  PANIC_BUTTON
+  ANOMALY_DETECTED
+  SAFETY_VIOLATION
+  OTHER
+}
+
+enum IncidentStatus {
+  REPORTED
+  ACKNOWLEDGED
+  IN_PROGRESS
+  RESOLVED
+  CLOSED
+  FALSE_ALARM
+}
+
+enum AlertSeverity {
+  LOW
+  MEDIUM
+  HIGH
+  CRITICAL
+}
+
+enum ZoneRiskLevel {
+  SAFE
+  MODERATE
+  HIGH
+  RESTRICTED
+}
+
+enum NotificationType {
+  GEO_FENCE_ALERT
+  SAFETY_SCORE_UPDATE
+  EMERGENCY_ALERT
+  SYSTEM_NOTIFICATION
+  INCIDENT_UPDATE
+}
+
+enum TransactionStatus {
+  PENDING
+  CONFIRMED
+  FAILED
+}
+
+enum Gender {
+  MALE
+  FEMALE
+}
+
+
 model User {
-  id       String     @id @default(uuid())
-  name     String
-  username String  @unique
-  email    String  @unique
-  password String
-  createdAt DateTime @default(now())
+  id                String            @id @default(cuid())
+  name              String
+  email             String?           @unique
+  password          String
+  blockchainHash    String?
+  phone             String?           @unique
+  role              UserRole?         @default(TOURIST)
+  createdAt         DateTime          @default(now())
+  updatedAt         DateTime          @updatedAt
+  gender            Gender?
+
+  tourist           Tourist?
+  emergencyContacts  EmergencyContact[] @relation("UserEmergencyContacts")
+  notifications     Notification[]
+
+  @@map("users")
+}
+
+model Police {
+  id                String            @id @default(uuid())
+  department        String            @unique
+  password          String
+  createdAt         DateTime          @default(now())
+  updatedAt         DateTime          @updatedAt
+
+
+
+  @@map("police")
+}
+
+model Tourist {
+  id                String            @id @default(cuid())
+  userId            String            @unique
+  digitalId         String            @unique
+  blockchainHash    String?           @unique
+  photoCid          String?
+
+  firstName         String
+  lastName          String
+  dateOfBirth       DateTime
+  nationality       String
+  aadhaarNumber     String?           @unique
+  isVerified        Boolean           @default(false)
+  gender            String
+  profileImage      String?
+
+  entryDate         DateTime
+  expectedExitDate  DateTime?
+  actualExitDate    DateTime?
+  entryPoint        String
+
+  status            TouristStatus     @default(ACTIVE)
+  safetyScore       Int               @default(100)
+  riskLevel         ZoneRiskLevel     @default(SAFE) 
+  lastKnownLat      Float?
+  lastKnownLng      Float?
+  lastLocationUpdate DateTime?
+  isSafe            Boolean           @default(true) 
+
+  trackingEnabled   Boolean           @default(true) 
+  shareLocation     Boolean           @default(false)
+
+  createdAt         DateTime          @default(now())
+  updatedAt         DateTime          @updatedAt
+
+  
+  user              User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  itinerary         Itinerary[]
+  emergencyContacts EmergencyContact[]
+  locationHistory   LocationHistory[]
+  incidents         Incident[]
+  alerts            Alert[]
+  notifications     Notification[]
+  blockchainTransactions BlockchainTransaction[]
+
+  @@index([userId])
+  @@index([digitalId])
+  @@map("tourists")
+}
+
+model Itinerary {
+  id            String    @id @default(cuid())
+  touristId     String
+  destination   String
+  plannedDate   DateTime
+  actualDate    DateTime?
+  latitude      Float?
+  longitude     Float?
+  notes         String?
+  isCompleted   Boolean   @default(false)
+  order         Int
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  tourist       Tourist   @relation(fields: [touristId], references: [id], onDelete: Cascade)
+
+  @@index([touristId, plannedDate])
+  @@map("itineraries")
+}
+
+model EmergencyContact {
+  id            String    @id @default(cuid())
+  touristId     String?
+  userId        String?
+  name          String
+  phone         String    @unique 
+  email         String?   @unique
+  relationship  String
+  isPrimary     Boolean   @default(false)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  tourist       Tourist?  @relation(fields: [touristId], references: [id], onDelete: Cascade)
+  user          User?     @relation("UserEmergencyContacts", fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([touristId])
+  @@index([userId])
+  @@map("emergency_contacts")
+}
+
+model GeoFence {
+  id            Int       @id @default(autoincrement())
+  name          String
+  riskLevel     ZoneRiskLevel
+  isActive      Boolean   @default(true)
+  type          String    
+  centerLat     Float?    
+  centerLng     Float?    
+  radius        Float?    
+  coordinates   Json?     
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  alerts        Alert[]   
+
+  @@index([type])
+  @@index([isActive])
+  @@map("geo_fences")
+}
+
+model LocationHistory {
+  id            String    @id @default(cuid())
+  touristId     String
+  latitude      Float
+  longitude     Float
+  accuracy      Float?
+  timestamp     DateTime  @default(now())
+  source        String    @default("GPS")
+  speed         Float?
+
+  tourist       Tourist   @relation(fields: [touristId], references: [id], onDelete: Cascade)
+
+  @@index([touristId, timestamp])
+  @@map("location_history")
+}
+
+model Incident {
+  id            String        @id @default(cuid())
+  incidentId    String        @unique
+  touristId     String
+  type          IncidentType
+  status        IncidentStatus @default(REPORTED)
+  severity      AlertSeverity @default(MEDIUM)
+  title         String
+  description   String
+  latitude      Float?
+  longitude     Float?
+  location      String?
+  reportedAt    DateTime      @default(now())
+  acknowledgedAt DateTime?
+  resolvedAt    DateTime?
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+
+  tourist       Tourist       @relation(fields: [touristId], references: [id], onDelete: Cascade)
+  updates       IncidentUpdate[]
+  eFir          EFir?
+
+  @@index([touristId])
+  @@index([incidentId])
+  @@map("incidents")
+}
+
+model IncidentUpdate {
+  id            String          @id @default(cuid())
+  incidentId    String
+  updatedBy     String          
+  update        String
+  newStatus     IncidentStatus?
+  timestamp     DateTime        @default(now())
+  attachments   Json?
+
+  incident      Incident        @relation(fields: [incidentId], references: [id], onDelete: Cascade)
+
+  @@index([incidentId])
+  @@map("incident_updates")
+}
+
+model EFir {
+  id            String    @id @default(cuid())
+  incidentId    String    @unique
+  firNumber     String    @unique
+  stationCode   String
+  complainant   String
+  accused       String?
+  sections      Json      
+  summary       String
+  filedAt       DateTime  @default(now())
+  filedBy       String    
+  isApproved    Boolean   @default(false)
+  approvedBy    String?   
+  approvedAt    DateTime?
+
+  incident      Incident  @relation(fields: [incidentId], references: [id], onDelete: Cascade)
+
+  @@index([incidentId])
+  @@index([filedBy])
+  @@index([approvedBy])
+  @@map("e_fir")
+}
+
+model Alert {
+  id            String          @id @default(cuid())
+  touristId     String
+  type          NotificationType
+  severity      AlertSeverity   @default(MEDIUM)
+  title         String
+  message       String
+  latitude      Float?
+  longitude     Float?
+  geoFenceId    Int?            
+  isRead        Boolean         @default(false)
+  isResolved    Boolean         @default(false)
+  createdAt     DateTime        @default(now())
+  resolvedAt    DateTime?
+
+  tourist       Tourist         @relation(fields: [touristId], references: [id], onDelete: Cascade)
+  geoFence      GeoFence?       @relation(fields: [geoFenceId], references: [id])
+
+  @@index([touristId, isRead])
+  @@index([geoFenceId])
+  @@map("alerts")
+}
+
+model Notification {
+  id            String           @id @default(cuid())
+  userId        String?
+  touristId     String?
+  type          NotificationType
+  title         String
+  message       String
+  data          Json?
+  isRead        Boolean          @default(false)
+  isGlobal      Boolean          @default(false)
+  deliveredAt   DateTime?
+  readAt        DateTime?
+  createdAt     DateTime         @default(now())
+  expiresAt     DateTime?
+
+  user          User?            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  tourist       Tourist?         @relation(fields: [touristId], references: [id], onDelete: Cascade)
+
+  @@index([userId, isRead])
+  @@index([touristId, isRead])
+  @@map("notifications")
+}
+
+model TouristAnalytics {
+  id                String    @id @default(cuid())
+  date              DateTime  @db.Date
+  totalTourists     Int       @default(0)
+  activeTourists    Int       @default(0)
+  newArrivals       Int       @default(0)
+  departures        Int       @default(0)
+  emergencyCount    Int       @default(0)
+  averageSafetyScore Float    @default(0)
+  topDestinations   Json?     
+  riskZoneVisits    Json?     
+  createdAt         DateTime  @default(now())
+
+  @@unique([date])
+  @@map("tourist_analytics")
+}
+
+model BlockchainTransaction {
+  id                String           @id @default(cuid())
+  transactionHash   String           @unique
+  blockHash         String?
+  blockNumber       Int?
+  type              String           
+  touristId         String?
+  data              Json
+  status            TransactionStatus @default(PENDING)
+  gasUsed           String?
+  gasPrice          String?
+  submittedAt       DateTime         @default(now())
+  confirmedAt       DateTime?
+
+  tourist           Tourist?         @relation(fields: [touristId], references: [id], onDelete: Cascade)
+
+  @@index([touristId])
+  @@index([transactionHash])
+  @@map("blockchain_transactions")
+}
+
+model AccessLog {
+  id          Int      @id @default(autoincrement())
+  endpoint    String
+  accessedId  String
+  accessedAt  DateTime @default(now())
+  accessorIp  String?
 }
