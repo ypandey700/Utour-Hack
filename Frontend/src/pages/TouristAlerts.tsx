@@ -31,76 +31,76 @@ const TouristAlerts = () => {
       priority: "Low",
       category: "Weather"
     },
-    {
-      id: 2,
-      type: "Yellow",
-      title: "High Tourist Influx Expected",
-      description: "Heavy crowd expected at Badrinath Temple during weekend. Plan your visit early morning or late evening to avoid rush.",
-      location: "Badrinath Temple",
-      time: "4 hours ago",
-      priority: "Medium",
-      category: "Crowd Management"
-    },
-    {
-      id: 3,
-      type: "Red",
-      title: "Route Temporarily Restricted",
-      description: "Kedarnath helicopter service suspended due to adverse weather conditions. Alternative trekking route available with proper permits.",
-      location: "Kedarnath Helipad",
-      time: "6 hours ago",
-      priority: "High",
-      category: "Transportation"
-    },
-    {
-      id: 4,
-      type: "Blue",
-      title: "New Facilities Available",
-      description: "Free WiFi and medical facilities now available at Gangotri base camp. Emergency contact numbers updated.",
-      location: "Gangotri",
-      time: "1 day ago",
-      priority: "Low",
-      category: "Facilities"
-    },
-    {
-      id: 5,
-      type: "Yellow",
-      title: "Traffic Advisory",
-      description: "Slow moving traffic on NH7 due to road maintenance work. Expected delay of 2-3 hours. Plan accordingly.",
-      location: "NH7 - Rishikesh to Joshimath",
-      time: "1 day ago",
-      priority: "Medium",
-      category: "Traffic"
-    },
-    {
-      id: 6,
-      type: "Green",
-      title: "Valley of Flowers Blooming Season",
-      description: "Peak blooming season has started in Valley of Flowers. Over 300 species of flowers in full bloom. Best time for photography.",
-      location: "Valley of Flowers National Park",
-      time: "2 days ago",
-      priority: "Low",
-      category: "Seasonal"
-    },
-    {
-      id: 7,
-      type: "Red",
-      title: "Flash Flood Warning",
-      description: "Heavy rainfall in upper catchments may cause flash floods in river valleys. Avoid camping near riverbanks.",
-      location: "Alaknanda River Valley",
-      time: "3 days ago",
-      priority: "High",
-      category: "Safety"
-    },
-    {
-      id: 8,
-      type: "Blue",
-      title: "Cultural Festival Starting",
-      description: "Ganga Aarti timing extended during Kanwar Yatra season. Special arrangements for devotees with additional facilities.",
-      location: "Har Ki Pauri, Haridwar",
-      time: "3 days ago",
-      priority: "Low",
-      category: "Events"
-    }
+    // {
+    //   id: 2,
+    //   type: "Yellow",
+    //   title: "High Tourist Influx Expected",
+    //   description: "Heavy crowd expected at Badrinath Temple during weekend. Plan your visit early morning or late evening to avoid rush.",
+    //   location: "Badrinath Temple",
+    //   time: "4 hours ago",
+    //   priority: "Medium",
+    //   category: "Crowd Management"
+    // },
+    // {
+    //   id: 3,
+    //   type: "Red",
+    //   title: "Route Temporarily Restricted",
+    //   description: "Kedarnath helicopter service suspended due to adverse weather conditions. Alternative trekking route available with proper permits.",
+    //   location: "Kedarnath Helipad",
+    //   time: "6 hours ago",
+    //   priority: "High",
+    //   category: "Transportation"
+    // },
+    // {
+    //   id: 4,
+    //   type: "Blue",
+    //   title: "New Facilities Available",
+    //   description: "Free WiFi and medical facilities now available at Gangotri base camp. Emergency contact numbers updated.",
+    //   location: "Gangotri",
+    //   time: "1 day ago",
+    //   priority: "Low",
+    //   category: "Facilities"
+    // },
+    // {
+    //   id: 5,
+    //   type: "Yellow",
+    //   title: "Traffic Advisory",
+    //   description: "Slow moving traffic on NH7 due to road maintenance work. Expected delay of 2-3 hours. Plan accordingly.",
+    //   location: "NH7 - Rishikesh to Joshimath",
+    //   time: "1 day ago",
+    //   priority: "Medium",
+    //   category: "Traffic"
+    // },
+    // {
+    //   id: 6,
+    //   type: "Green",
+    //   title: "Valley of Flowers Blooming Season",
+    //   description: "Peak blooming season has started in Valley of Flowers. Over 300 species of flowers in full bloom. Best time for photography.",
+    //   location: "Valley of Flowers National Park",
+    //   time: "2 days ago",
+    //   priority: "Low",
+    //   category: "Seasonal"
+    // },
+    // {
+    //   id: 7,
+    //   type: "Red",
+    //   title: "Flash Flood Warning",
+    //   description: "Heavy rainfall in upper catchments may cause flash floods in river valleys. Avoid camping near riverbanks.",
+    //   location: "Alaknanda River Valley",
+    //   time: "3 days ago",
+    //   priority: "High",
+    //   category: "Safety"
+    // },
+    // {
+    //   id: 8,
+    //   type: "Blue",
+    //   title: "Cultural Festival Starting",
+    //   description: "Ganga Aarti timing extended during Kanwar Yatra season. Special arrangements for devotees with additional facilities.",
+    //   location: "Har Ki Pauri, Haridwar",
+    //   time: "3 days ago",
+    //   priority: "Low",
+    //   category: "Events"
+    // }
   ];
 
   const getAlertIcon = (type: string) => {

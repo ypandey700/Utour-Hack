@@ -47,9 +47,9 @@ const TouristMap = () => {
 
   const restrictedAreas = [
     { name: "Kedarnath Approach Road", reason: "Landslide Warning", severity: "High" },
-    { name: "Char Dham Route (NH7)", reason: "Heavy Traffic", severity: "Medium" },
-    { name: "Valley of Flowers Trail", reason: "Weather Conditions", severity: "High" },
-    { name: "High Altitude Areas", reason: "Oxygen Levels", severity: "Medium" }
+    // { name: "Char Dham Route (NH7)", reason: "Heavy Traffic", severity: "Medium" },
+    // { name: "Valley of Flowers Trail", reason: "Weather Conditions", severity: "High" },
+    // { name: "High Altitude Areas", reason: "Oxygen Levels", severity: "Medium" }
   ];
 
   // Utility functions

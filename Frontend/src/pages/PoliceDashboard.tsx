@@ -31,10 +31,10 @@ const PoliceDashboard = () => {
   ];
 
   const touristStats = {
-    totalToday: 15420,
-    currentlyActive: 8350,
-    alertsGenerated: 23,
-    incidentsResolved: 12
+    totalToday: 8,
+    currentlyActive: 4,
+    alertsGenerated: 2,
+    incidentsResolved: 0
   };
 
   const getAlertColor = (type: string) => {
@@ -212,7 +212,7 @@ const PoliceDashboard = () => {
                 <CardDescription>Latest actions taken by the police force</CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
-                {recentActivity.map((activity, index) => (
+                {/* {recentActivity.map((activity, index) => (
                   <div key={index} className="flex justify-between items-center p-4 bg-muted/30 rounded-lg">
                     <div>
                       <h4 className="font-semibold text-sm">{activity.action}</h4>
@@ -223,7 +223,7 @@ const PoliceDashboard = () => {
                       {activity.status}
                     </Badge>
                   </div>
-                ))}
+                ))} */}
               </CardContent>
             </Card>
           </div>

@@ -29,8 +29,8 @@ const PersonalTouristTracker: React.FC = () => {
   const [isSimulating, setIsSimulating] = useState(false);
   const [tourist, setTourist] = useState<Tourist>({
     id: '1',
-    name: 'Rahul Sharma',
-    touristId: 'T2025001',
+    name: 'baman2326',
+    touristId: 'T83113',
     position: { lat: 30.0668, lng: 79.0193 },
     checkpoint: 0,
     status: 'online',

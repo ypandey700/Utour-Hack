@@ -17,15 +17,14 @@ const TouristDashboard = () => {
   ];
 
   const recentBookings = [
-    { destination: "Kedarnath Temple", date: "2024-03-15", status: "Confirmed", type: "Pilgrimage" },
-    { destination: "Valley of Flowers", date: "2024-04-02", status: "Pending", type: "Trekking" },
-    { destination: "Rishikesh Ganga Aarti", date: "2024-03-20", status: "Confirmed", type: "Spiritual" }
+    { destination: "Kedarnath Temple", date: "2025-08-27", status: "Confirmed", type: "Pilgrimage" },
+    // { destination: "Valley of Flowers", date: "2024-04-02", status: "Pending", type: "Trekking" },
+    // { destination: "Rishikesh Ganga Aarti", date: "2024-03-20", status: "Confirmed", type: "Spiritual" }
   ];
 
   const alerts = [
     { type: "Green", message: "Weather conditions are favorable for Char Dham Yatra", time: "2 hours ago" },
-    { type: "Yellow", message: "Heavy tourist influx expected at Badrinath", time: "5 hours ago" },
-    { type: "Blue", message: "New trekking route opened to Valley of Flowers", time: "1 day ago" }
+    
   ];
 
   const getAlertColor = (type: string) => {
@@ -64,14 +63,14 @@ const TouristDashboard = () => {
                 <Volume2 className="mr-2 h-4 w-4" />
                 Text-to-Speech
               </Button>
-              <Button variant="outline" size="sm">
+              {/* <Button variant="outline" size="sm">
                 <Mic className="mr-2 h-4 w-4" />
                 Voice Record
-              </Button>
-              <Button variant="outline" size="sm">
+              </Button> */}
+              {/* <Button variant="outline" size="sm">
                 <User className="mr-2 h-4 w-4" />
                 Profile
-              </Button>
+              </Button> */}
               <Link to="/">
                 <Button variant="outline" size="sm">
                   <LogOut className="mr-2 h-4 w-4" />

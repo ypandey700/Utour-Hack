@@ -22,6 +22,9 @@ import PoliceFIR from "./pages/PoliceFIR";
 import AIMonitoring from "./pages/AIMonitoring";
 import RestrictedPoints from "./pages/RestrictedPoints";
 import Notifications from "./pages/Notifications";
+import TouristProfile from "./pages/TouristProfile";
+
+
 
 const queryClient = new QueryClient();
 
@@ -33,7 +36,9 @@ const App = () => (
         <Sonner />
         <BrowserRouter>
           <Routes>
-            <Route path="/" element={<Index />} />
+            
+<Route path="/tourist-profile" element={<TouristProfile />} />
+            
             <Route path="/register-tourist" element={<RegisterTourist />} />
             <Route path="/register-police" element={<RegisterPolice />} />
             <Route path="/login" element={<Login />} />
